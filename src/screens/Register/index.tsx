@@ -3,6 +3,7 @@ import { Container, Fields, Form, Header, Title, TransactionsTypes } from './sty
 import Input from '../../components/Forms/Input'
 import Button from '../../components/Forms/Button'
 import TransactionTypeButton from '../../components/Forms/TransactionTypeButton'
+import CategorySelect from '../../components/Forms/CategorySelect'
 
 export default function Register() {
   const [category, setCategory] = useState('')
@@ -35,6 +36,7 @@ export default function Register() {
               isActive={transactionType === 'down'}
             />
           </TransactionsTypes>
+          <CategorySelect title="Categoria" />
         </Fields>
         <Button title="Enviar" />
       </Form>
