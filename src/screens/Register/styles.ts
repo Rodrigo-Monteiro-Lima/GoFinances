@@ -25,13 +25,17 @@ export const Form = styled.View`
   flex: 1;
   width: 100%;
   padding: 24px;
+  justify-content: space-between;
 `;
 
-export const Error = styled.Text`
-  font-size: 14px;
-  color: ${({ theme }) => theme.colors.attention};
-  font-family: ${({ theme }) => theme.fonts.regular};
-  margin: 7px 0;
+export const Fields = styled.View`
+`;
+
+export const TransactionsTypes = styled.View`
+  flex-direction: row;
+  justify-content: space-between;
+  margin-top: 8px;
+  margin-bottom: 16px;
 `;
 
 export const InputContainer = styled.View`
