@@ -4,6 +4,7 @@ import {useFonts, Poppins_400Regular, Poppins_500Medium, Poppins_700Bold} from '
 import AppLoading from 'expo-app-loading';
 import Dashboard from './src/screens/Dashboard';
 import Register from './src/screens/Register';
+import CategorySelect from './src/screens/CategorySelect';
 
 export default function App() {
   const [fontsLoaded] = useFonts({
@@ -18,6 +19,7 @@ export default function App() {
     <ThemeProvider theme={theme}> 
      {/* <Dashboard /> */}
      <Register />
+     {/* <CategorySelect /> */}
   </ThemeProvider>
   );
 }
