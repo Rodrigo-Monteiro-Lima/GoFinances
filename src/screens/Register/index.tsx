@@ -1,5 +1,6 @@
 import React from 'react'
-import { Container, Header, Title } from './styles'
+import { Container, Form, Header, Title } from './styles'
+import Input from '../../components/Forms/Input'
 
 export default function Register() {
   return (
@@ -7,6 +8,10 @@ export default function Register() {
       <Header>
         <Title>Cadastro</Title>
       </Header>
+      <Form>
+        <Input placeholder="Nome" />
+        <Input placeholder="Preço" />
+      </Form>
     </Container>
   )
 }
