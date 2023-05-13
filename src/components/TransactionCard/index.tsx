@@ -1,17 +1,13 @@
 import { View, Text } from 'react-native'
 import React from 'react'
 import { Container, Amount, Footer, Title, Icon, Category, CategoryName, Date } from './styles'
-
-interface Category {
-  name: string;
-  icon: string;
-}
+import { categories } from '../../utils/categories';
 
 export interface Transaction {
-  type: 'positive' | 'negative';
-  title: string;
-  amount: string;
-  category: Category;
+  type: 'up' | 'down';
+  name: string;
+  amount: number;
+  category: string;
   date: string;
 }
 
@@ -19,18 +15,19 @@ export interface Transaction {
   data: Transaction;
 }
 
-export default function TransactionCard({data: {amount, category, date, title, type}} : TransactionCardProps) {
+export default function TransactionCard({data: {amount, category, date, name, type}} : TransactionCardProps) {
+  const [categoryIcon] = categories.filter(item => item.key === category)
   return (
     <Container>
-      <Title>{title}</Title>
+      <Title>{name}</Title>
       <Amount type={type}>
-        { type === 'negative' &&  '- '}
-        {amount}
+        { type === 'down' &&  '- '}
+        R$ {amount}
         </Amount>
       <Footer>
         <Category>
-          <Icon name={category.icon} />
-          <CategoryName>{category.name}</CategoryName>
+          <Icon name={categoryIcon.icon} />
+          <CategoryName>{categoryIcon.name}</CategoryName>
         </Category>
         <Date>
           {date}

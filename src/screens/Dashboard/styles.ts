@@ -3,7 +3,7 @@ import { RFPercentage, RFValue } from 'react-native-responsive-fontsize';
 import { Feather } from '@expo/vector-icons'
 import { getBottomSpace, getStatusBarHeight } from 'react-native-iphone-x-helper';
 import { DataListProps } from '.';
-import { FlatList } from 'react-native';
+import { FlatList, FlatListProps } from 'react-native';
 
 export const Container = styled.View`
   flex: 1;
@@ -56,10 +56,10 @@ export const UserName = styled.Text`
   font-family: ${({ theme }) => theme.fonts.bold};
 `;
 
-// export const LogoutButton = styled.TouchableOpacity`
-//   flex-direction: row;
-//   align-items: center;
-// `;
+export const LogoutButton = styled.TouchableOpacity`
+  flex-direction: row;
+  align-items: center;
+`;
 
 export const Icon = styled(Feather)`
   color: ${({ theme }) => theme.colors.secondary};
@@ -90,16 +90,20 @@ export const Title = styled.Text`
   margin-bottom: 16px;
 `;
 
-export const TransactionList = styled(FlatList as new () => FlatList<DataListProps>).attrs({
+export const TransactionList = styled(
+  FlatList as new (
+    props: FlatListProps<DataListProps>
+  ) => FlatList<DataListProps>
+).attrs({
   showsVerticalScrollIndicator: false,
   contentContainerStyle: { paddingBottom: getBottomSpace() }
 })``;
 
-// export const LoadContainer = styled.View`
-//   flex: 1;
-//   justify-content: center;
-//   align-items: center;
-// `;
+export const LoadContainer = styled.View`
+  flex: 1;
+  justify-content: center;
+  align-items: center;
+`;
 
 // export const LoadAnimation = styled.ActivityIndicator.attrs({
 //   color: theme.colors.secondary,
