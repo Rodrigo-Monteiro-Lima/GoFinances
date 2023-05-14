@@ -16,6 +16,8 @@ interface IAuthContextData {
   user: User;
   signInWithGoogle(): Promise<void>;
   signInWithApple(): Promise<void>;
+  signOut(): Promise<void>;
+  userStorageLoading: boolean;
 }
 
 export const AuthContext = createContext({} as IAuthContextData);
@@ -34,6 +36,7 @@ interface AuthorizationResponse {
 const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
   const [user, setUser] = useState<User>({} as User);
   const [userStorageLoading, setUserStorageLoading] = useState(true);
+  const dataKey = '@gofinances:user';
   async function signInWithGoogle() {
     try {
       const RESPONSE_TYPE = 'token';
@@ -43,14 +46,13 @@ const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
       if (type === 'success') {
         const response = await fetch(`https://www.googleapis.com/oauth2/v1/userinfo?alt=json&access_token=${access_token}`);
         const userInfo = await response.json();
-        console.log(userInfo)
         setUser({
           id: userInfo.id,
           email: userInfo.email,
           name: userInfo.given_name,
           photo: userInfo.picture,
         });
-        await AsyncStorage.setItem('@gofinances:user', JSON.stringify({ id: userInfo.id, email: userInfo.email, name: userInfo.given_name, photo: userInfo.picture }));
+        await AsyncStorage.setItem(dataKey, JSON.stringify({ id: userInfo.id, email: userInfo.email, name: userInfo.given_name, photo: userInfo.picture }));
       }
     } catch (error: unknown) {
       throw new Error(error as string);
@@ -74,15 +76,20 @@ const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
           photo,
         }
         setUser(userLogged);
-        await AsyncStorage.setItem('@gofinances:user', JSON.stringify(userLogged));
+        await AsyncStorage.setItem(dataKey, JSON.stringify(userLogged));
       }
     } catch (error: unknown) {
       throw new Error(error as string);
     }
   }
+
+  async function signOut() {
+    setUser({} as User);
+    await AsyncStorage.removeItem(dataKey);
+  }
   useEffect(() => {
     async function loadUserStorageData() {
-      const userStorage = await AsyncStorage.getItem('@gofinances:user');
+      const userStorage = await AsyncStorage.getItem(dataKey);
       if (userStorage) {
         const userLogged = JSON.parse(userStorage) as User;
         setUser(userLogged);
@@ -93,9 +100,11 @@ const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
   }, []);
   const value = useMemo(() => ({
     user,
+    userStorageLoading,
     signInWithGoogle,
     signInWithApple,
-  }), [user]);
+    signOut,
+  }), [user, userStorageLoading]);
   return (
     <AuthContext.Provider value={value}>
       {children}
