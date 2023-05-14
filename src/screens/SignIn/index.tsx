@@ -4,6 +4,7 @@ import AppleSvg from '../../assets/apple.svg'
 import GoogleSvg from '../../assets/google.svg'
 import LogoSvg from '../../assets/logo.svg'
 import { RFValue } from 'react-native-responsive-fontsize'
+import SignInSocialButton from '../../components/SignInSocialButton'
 
 export default function SignIn() {
   return (
