@@ -10,7 +10,7 @@ interface Props extends TouchableOpacityProps {
 
 export default function SignInSocialButton({title, svg: Svg, ...rest} : Props) {
   return (
-    <Button {...rest}>
+    <Button {...rest} activeOpacity={0.9}>
       <ImageContainer>
         <Svg />
       </ImageContainer>
