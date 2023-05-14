@@ -29,7 +29,7 @@ export default function Dashboard() {
   const [isLoading, setIsLoading] = useState(true)
   const theme = useTheme();
   const { signOut, user } = useAuth();
-  const { name, photo } = user;
+  const { name, photo, id } = user;
   const [highlightData, setHighlightData] = useState<HighlightData>({
     entries: {
       amount: 'R$ 0,00',
@@ -49,7 +49,7 @@ export default function Dashboard() {
     return moment(new Date(lastTransaction)).format('DD [de] MMMM')
   }
   async function loadData() {
-    const dataKey = '@gofinances:transactions'
+    const dataKey = `@gofinances:transactions_user:${id}`;
     const response = await AsyncStorage.getItem(dataKey)
     const transactions = response ? JSON.parse(response) : []
     let entriesTotal = 0

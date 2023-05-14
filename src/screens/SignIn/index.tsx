@@ -6,7 +6,7 @@ import LogoSvg from '../../assets/logo.svg'
 import { RFValue } from 'react-native-responsive-fontsize'
 import SignInSocialButton from '../../components/SignInSocialButton'
 import useAuth from '../../hooks/auth'
-import { ActivityIndicator, Alert } from 'react-native'
+import { ActivityIndicator, Alert, Platform } from 'react-native'
 import { useTheme } from 'styled-components'
 
 export default function SignIn() {
@@ -20,7 +20,6 @@ export default function SignIn() {
     } catch (error: unknown) {
       console.log(error);
       Alert.alert('Não foi possível conectar a conta Google');
-    } finally {
       setIsLoading(false);
     }
   }
@@ -31,7 +30,6 @@ export default function SignIn() {
     } catch (error: unknown) {
       console.log(error);
       Alert.alert('Não foi possível conectar a conta Apple');
-    } finally {
       setIsLoading(false);
     }
   }
@@ -54,7 +52,10 @@ export default function SignIn() {
         <Footer>
           <FooterWrapper>
             <SignInSocialButton title="Entrar com Google" svg={GoogleSvg} onPress={handleSignInWithGoogle}/>
-            <SignInSocialButton title="Entrar com Apple" svg={AppleSvg} onPress={handleSignInWithApple}/>
+            {
+              Platform.OS === 'ios' &&
+              <SignInSocialButton title="Entrar com Apple" svg={AppleSvg} onPress={handleSignInWithApple}/>
+            }
           </FooterWrapper>
           {isLoading && <ActivityIndicator color={theme.colors.shape} style={{marginTop: 18}}/> }
         </Footer>
