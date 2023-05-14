@@ -1,5 +1,7 @@
 import React, { ReactNode, createContext, useMemo, useState } from 'react';
 import * as AuthSession from 'expo-auth-session';
+import * as AppleAuthentication from 'expo-apple-authentication';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 const { CLIENT_ID } = process.env;
 const { REDIRECT_URI } = process.env;
 
@@ -13,6 +15,7 @@ interface User {
 interface IAuthContextData {
   user: User;
   signInWithGoogle(): Promise<void>;
+  signInWithApple(): Promise<void>;
 }
 
 export const AuthContext = createContext({} as IAuthContextData);
@@ -51,10 +54,34 @@ const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
       throw new Error(error as string);
     }
   }
-
+  async function signInWithApple() {
+    try {
+      const credential = await AppleAuthentication.signInAsync({
+        requestedScopes: [
+          AppleAuthentication.AppleAuthenticationScope.FULL_NAME,
+          AppleAuthentication.AppleAuthenticationScope.EMAIL,
+        ]
+      });
+      if (credential) {
+        const name = credential.fullName!.givenName!;
+        const photo = `https://ui-avatars.com/api/?name=${name}&length=1`;
+        const userLogged = {
+          id: String(credential.user),
+          email: credential.email!,
+          name,
+          photo,
+        }
+        setUser(userLogged);
+        await AsyncStorage.setItem('@gofinances:user', JSON.stringify(userLogged));
+      }
+    } catch (error: unknown) {
+      throw new Error(error as string);
+    }
+  }
   const value = useMemo(() => ({
     user,
     signInWithGoogle,
+    signInWithApple,
   }), [user]);
   return (
     <AuthContext.Provider value={value}>
